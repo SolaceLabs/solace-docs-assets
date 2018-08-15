@@ -1,0 +1,44 @@
+# docker-compose -f singleNode.yml up to start a single node 
+version: '2.1'
+
+x-environment:
+  &default-environment
+  username_admin_globalaccesslevel: admin
+  username_admin_password: admin
+  system_scaling_maxconnectioncount: 100
+
+networks:
+  hanet: {}
+
+services:
+   primary:
+       container_name: pubSubStandardSingleNode
+       image: solace/solace-pubsub-standard:latest
+       shm_size: 1g
+       ulimits:
+        core: 1
+        nofile:
+          soft: 2448
+          hard: 38048
+       restart: always
+       ports:
+          - '80:80'
+          - '443:443'
+          - '943:943'
+          - '1883:1883'
+          - '5671:5671'
+          - '5672:5672'
+          - '8000:8000'
+          - '8080:8080'
+          - '8443:8443'
+          - '8883:8883'
+          - '9000:9000'
+          - '9443:9443'
+          - '55555:55555'
+          - '55003:55003'
+          - '55443:55443'
+          - '1936:1936'
+       networks:
+          - hanet
+       environment:
+          << : *default-environment
